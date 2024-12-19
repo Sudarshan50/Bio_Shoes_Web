@@ -1,18 +1,15 @@
-class ApiResponse {
-    constructor(success, message, data = null) {
-        this.success = success;
-        this.message = message;
-        this.data = data;
-    }
+export const successResponse = (res, message, data = {}) => {
+  return res.status(200).json({
+    success: true,
+    message,
+    data,
+  });
+};
 
-    static success(message, data) {
-        return new ApiResponse('true', message, data);
-    }
-
-    static error(message, data = null) {
-        return new ApiResponse('false', message, data);
-    }
-}
-
-export default ApiResponse;
-
+export const errorResponse = (res, message, error = null, status = 500) => {
+  return res.status(status).json({
+    success: false,
+    message,
+    error,
+  });
+};

@@ -14,10 +14,12 @@ const PlaceOrder = () => {
         <div className="text-xl sm:text-2xl my-3">
           <Title text1="DELIVERY" text2="INFORMATION" />
         </div>
+        {/* TODO:Fill form auto with user data */}
         <div className="flex  gap-3">
           <input
             className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
             type="text"
+            required
             placeholder="First Name"
           />
           <input
@@ -29,22 +31,26 @@ const PlaceOrder = () => {
         <input
           className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
           type="email"
+          required
           placeholder="Email Address"
         />
         <input
           className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
           type="text"
+          required
           placeholder="Address"
         />
         <div className="flex  gap-3">
           <input
             className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
             type="text"
+            required
             placeholder="City"
           />
           <input
             className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
             type="text"
+            required
             placeholder="State"
           />
         </div>
@@ -52,6 +58,7 @@ const PlaceOrder = () => {
           <input
             className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
             type="text"
+            required
             placeholder="Pincode"
           />
           <input
@@ -65,6 +72,7 @@ const PlaceOrder = () => {
         <input
           className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
           type="tel"
+          required
           placeholder="Phone Number"
         />
       </div>
