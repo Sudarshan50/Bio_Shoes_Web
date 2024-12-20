@@ -1,12 +1,12 @@
 import express from "express";
 import dotenv from "dotenv";
-import { dbConnect } from "./src/lib/db.js";
-import AuthRouter from "./src/routes/AuthRouter.js";
-import AnalyticsRouter from "./src/routes/AnalyticsRouter.js";
-import CartRouter from "./src/routes/CartRouter.js";
-import isChalu from "./src/middleware/checkAuth.js";
-import { successResponse } from "./src/lib/apiResponse.js";
-import ProductRouter from "./src/routes/ProductRouter.js";
+import { dbConnect } from "./lib/db.js";
+import AuthRouter from "./routes/AuthRouter.js";
+import AnalyticsRouter from "./routes/AnalyticsRouter.js";
+import CartRouter from "./routes/CartRouter.js";
+import isChalu from "./middleware/checkAuth.js";
+import { successResponse } from "./lib/apiResponse.js";
+import ProductRouter from "./routes/ProductRouter.js";
 import cors from "cors";
 
 const app = express();
