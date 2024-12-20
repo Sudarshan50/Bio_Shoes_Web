@@ -29,9 +29,13 @@ Auth.login = [
       if (!match) {
         return errorResponse(res, "Invalid credentials", null, 400);
       }
-      const token = jwt.sign({ id: user._id }, process.env.APP_SECRET, {
-        expiresIn: "1h",
-      });
+      const token = jwt.sign(
+        { id: user._id, tokenIssuedAt: Date.now() },
+        process.env.APP_SECRET,
+        {
+          expiresIn: "1h",
+        }
+      );
       return successResponse(res, "Login successful", { token });
     } catch (err) {
       console.log(err);
@@ -66,7 +70,14 @@ Auth.signup = [
         password: hashedPassword,
       });
       await newUser.save();
-      return successResponse(res, "User created successfully", null);
+      const token = jwt.sign(
+        { id: newUser._id, tokenIssuedAt: Date.now() },
+        process.env.APP_SECRET,
+        {
+          expiresIn: "1h",
+        }
+      );
+      return successResponse(res, "User created successfully", { token });
     } catch (err) {
       return errorResponse(res, "Something went wrong", err, 500);
     }
@@ -84,6 +95,7 @@ Auth.googleLogin = async (req, res) => {
       return errorResponse(res, "Invalid token", null, 400);
     }
     const { email, name } = decoded;
+    console.log(email, name);
     const user = await User.findOne({ email: email });
     if (!user) {
       const newUser = new User({
@@ -91,16 +103,46 @@ Auth.googleLogin = async (req, res) => {
         email,
       });
       await newUser.save();
-      const authToken = jwt.sign({ id: newUser._id }, process.env.APP_SECRET, {
-        expiresIn: "1h",
-      });
+      const authToken = jwt.sign(
+        { id: newUser._id, tokenIssuedAt: Date.now() },
+        process.env.APP_SECRET,
+        {
+          expiresIn: "1h",
+        }
+      );
       return successResponse(res, "Login successful", { token: authToken });
     }
-    const authToken = jwt.sign({ id: user._id }, process.env.APP_SECRET, {
-      expiresIn: "1h",
-    });
+    console.log(user);
+    const authToken = jwt.sign(
+      { id: user._id, tokenIssuedAt: Date.now() },
+      process.env.APP_SECRET,
+      {
+        expiresIn: "1h",
+      }
+    );
     return successResponse(res, "Login successful", { token: authToken });
   } catch (err) {
+    return errorResponse(res, "Something went wrong", err, 500);
+  }
+};
+
+Auth.logOut = async (req, res) => {
+  try {
+    const user = await User.findById(req.user);
+    user.currentSession = Date.now();
+    await user.save();
+    return successResponse(res, "Logged out successfully", null);
+  } catch (err) {
+    console.log(err);
+    return errorResponse(res, "Something went wrong", err, 500);
+  }
+};
+
+Auth.check = async (req, res) => {
+  try {
+    return successResponse(res, "User is logged in", null);
+  } catch (err) {
+    console.log(err);
     return errorResponse(res, "Something went wrong", err, 500);
   }
 };

@@ -17,13 +17,31 @@ const userSchema = new mongoose.Schema({
     type: String,
     minlength: 6,
   },
-  cartHistory: {
-    type: Array,
-    default: [],
-  },
-  orders: {
-    type: Array,
-    default: [],
+  cartHistory: [
+    {
+      productId: {
+        type: String,
+        required: true,
+        ref: "Product.id",
+      },
+      quantity: {
+        type: Number,
+        default: 0,
+      },
+      size: {
+        type: String,
+        required: true,
+      },
+      createdAt: {
+        type: Date,
+        default: Date.now,
+      },
+      default: [],
+    },
+  ],
+  currentSession: {
+    type: String,
+    default: Date.now,
   },
   createdAt: {
     type: Date,

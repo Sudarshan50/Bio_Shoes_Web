@@ -1,6 +1,7 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { ShopContext } from "../context/ShopContext";
 import Title from "../components/Title";
+import { assets } from "../assets/frontend_assets/assets";
 
 const Order = () => {
   const { products, currency } = useContext(ShopContext);
@@ -9,7 +10,12 @@ const Order = () => {
       <div className="text-2xl">
         <Title text1="MY" text2="ORDER" />
       </div>
-      <div>
+
+      <div className="flex flex-col items-center justify-center w-[100%] h-[50vh]">
+        <img src={assets.cart_icon} className="mb-4" />
+        <p className="text-gray-500 text-xl">No products ordered yet</p>
+      </div>
+      {/* <div>
         {products.slice(1, 4).map((item, index) => (
           <div
             key={index}
@@ -40,8 +46,9 @@ const Order = () => {
             </div>
           </div>
         ))}
-      </div>
+      </div> */}
     </div>
+
   );
 };
 

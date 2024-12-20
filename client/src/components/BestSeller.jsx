@@ -13,10 +13,10 @@ const BestSeller = () => {
   return (
     <div className="my-10">
       <div className="text-center text-3xl py-8">
-        <Title text1="BEST" text2="SELLER" />
+        <Title text1="BEST" text2="SELLING" />
         <p className="w-3/4 m-auto text-xs sm:text-sm md:text-base text-gray-600">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed doeiusmod
-          tempor incididunt ut labore et dolore magna aliqua.
+          Check out our best-selling eco-friendly bio shoes. These are the most
+          popular styles right now.
         </p>
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-6">

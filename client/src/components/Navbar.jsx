@@ -1,11 +1,47 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { assets } from "../assets/frontend_assets/assets";
 import { Link, NavLink } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
-
+import axiosInstance from "../lib/axiosInstance";
+import Cookie from "js-cookie";
+import { toast } from "react-toastify";
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
-  const { showSearch, setShowSearch, getCartCount } = useContext(ShopContext);
+  const [cnt, setCnt] = useState(0);
+  const {
+    showSearch,
+    setShowSearch,
+    cartCnt,
+    setLoading,
+    navigate,
+    isAuthenticated,
+    setCartItems,
+    setIsAuthenticated,
+  } = useContext(ShopContext);
+
+  const handleLogout = async () => {
+    setLoading(true);
+    await axiosInstance
+      .post("/auth/logout")
+      .then((res) => {
+        if (res.status === 200) {
+          Cookie.remove("token");
+          setLoading(false);
+          setCartItems({});
+          setIsAuthenticated(false);
+          navigate("/");
+          toast.success(res.data.message),
+            {
+              autoClose: 1000,
+            };
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.response.data.message);
+      })
+      .finally(() => setLoading(false));
+  };
   return (
     <div className="flex items-center justify-between py-5 font-medium">
       <Link to={"/"}>
@@ -53,7 +89,7 @@ const Navbar = () => {
           alt=""
         />
         <div className="group relative">
-          <Link to={"/login"}>
+          <Link to={`${isAuthenticated ? '/' : "/login"}`}>
             <img
               src={assets.profile_icon}
               className="w-5 cursor-pointer"
@@ -63,11 +99,18 @@ const Navbar = () => {
 
           <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4">
             <div className="flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 text-gray-500 rounded">
-              <p className="cursor-pointer hover:text-black">My Profile</p>
+              <p className="cursor-pointer hover:text-black"></p>
               <Link to={"/orders"}>
                 <p className="cursor-pointer hover:text-black">Orders</p>
               </Link>
-              <p className="cursor-pointer hover:text-black">Logout</p>
+              {isAuthenticated && (
+                <p
+                  onClick={handleLogout}
+                  className="cursor-pointer hover:text-black"
+                >
+                  Logout
+                </p>
+              )}
             </div>
           </div>
         </div>
@@ -78,7 +121,7 @@ const Navbar = () => {
             alt=""
           />
           <p className="absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-black text-white aspect-square rounded-full text-[8px]">
-            {getCartCount()}
+            {cartCnt}
           </p>
         </Link>
         <img

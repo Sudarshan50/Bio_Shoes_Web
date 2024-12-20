@@ -1,14 +1,106 @@
 import { GoogleLogin } from "@react-oauth/google";
 import { useContext, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
+import axiosInstance from "../lib/axiosInstance";
+import { toast } from "react-toastify";
+import Cookie from "js-cookie";
+import Spinner from "../components/Spinner";
 
 const Login = () => {
   const [currentState, setCurrentState] = useState("Sign Up");
-  const {navigate} = useContext(ShopContext);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+  const { navigate, loading, setLoading, setIsAuthenticated } =
+    useContext(ShopContext);
+
+  const handleGoogleSignIn = async (token) => {
+    setLoading(true);
+    await axiosInstance
+      .post("/auth/google", { token })
+      .then((res) => {
+        if (res.status === 200) {
+          setIsAuthenticated(true);
+          Cookie.set("token", res.data.data.token);
+          toast.success("Login successful", {
+            autoClose: 1000,
+          });
+          setLoading(false);
+          window.location.href = "/";
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.response.data.message);
+      })
+      .finally(() => setLoading(false));
+  };
+
+  const handleSignUp = async (data) => {
+    setLoading(true);
+    await axiosInstance
+      .post("/auth/signup", data)
+      .then((res) => {
+        if (res.status === 200) {
+          setIsAuthenticated(true);
+          Cookie.set("token", res.data.data.token);
+          toast.success("Login successful", {
+            autoClose: 1000,
+          });
+          setLoading(false);
+          navigate("/");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.response.data.message);
+      })
+      .finally(() => setLoading(false));
+  };
+
+  const handleSignIn = async (data) => {
+    setLoading(true);
+    await axiosInstance
+      .post("/auth/login", data)
+      .then((res) => {
+        if (res.status === 200) {
+          setIsAuthenticated(true);
+          Cookie.set("token", res.data.data.token);
+          toast.success("Login successful", {
+            autoClose: 1000,
+          });
+          setLoading(false);
+          navigate("/");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.response.data.message);
+      })
+      .finally(() => setLoading(false));
+  };
+
   const onSubmitHandler = async (e) => {
     e.preventDefault();
-    console.log("Submitted");
+    if (currentState === "Login") {
+      const data = {
+        email: formData.email,
+        password: formData.password,
+      };
+      handleSignIn(data);
+    } else {
+      handleSignUp(formData);
+    }
   };
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+      <Spinner />
+      </div>
+    );
+  }
   return (
     <form
       onSubmit={onSubmitHandler}
@@ -22,17 +114,26 @@ const Login = () => {
         <input
           className="w-full px-3 py-2 border border-gray-800"
           placeholder="Name"
+          required={currentState === "Sign Up"}
+          value={formData.name}
+          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           type="text"
         />
       ) : null}
       <input
         className="w-full px-3 py-2 border border-gray-800"
         placeholder="Email"
+        required
+        value={formData.email}
+        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
         type="email"
       />
       <input
         className="w-full px-3 py-2 border border-gray-800"
         placeholder="Password"
+        required
+        value={formData.password}
+        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
         type="password"
       />
       <div className="w-full flex justify-between text-sm ">
@@ -61,7 +162,7 @@ const Login = () => {
         <GoogleLogin
           onSuccess={(u) => {
             console.log(u);
-            navigate("/");
+            handleGoogleSignIn(u.credential);
           }}
           onError={(e) => {
             console.log(e);

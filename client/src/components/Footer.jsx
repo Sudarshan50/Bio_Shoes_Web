@@ -1,5 +1,5 @@
-import React from "react";
 import { assets } from "../assets/frontend_assets/assets";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -8,31 +8,47 @@ const Footer = () => {
         <div>
           <img src={assets.logo} className="mb-5 w-32" alt="" />
           <p className="w-full md:w-2/3 text-gray-600">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
-            laborum.
+            At <strong>GFoot</strong>, we create biodegradable shoes that reduce
+            carbon footprints while delivering quality, comfort, and style.
+            Transforming waste into eco-friendly footwear, our products
+            harmonize with nature, leaving a lasting positive impact. Step with
+            us toward a sustainable future—one shoe at a time.
           </p>
         </div>
         <div>
           <p className="text-xl font-medium mb-5">COMPANY</p>
           <ul className="flex flex-col gap-1 text-gray-600">
-            <li>Home</li>
-            <li>About Us</li>
-            <li>Delivery</li>
+            <Link to={"/"}>
+              <li>Home</li>
+            </Link>
+            <Link to={"/about"}>
+              <li>About Us</li>
+            </Link>
+            <Link to={"/orders"}>
+              <li>Orders</li>
+            </Link>
             <li>Privacy Policy</li>
           </ul>
         </div>
         <div>
           <p className="text-xl font-medium mb-5">GET IN TOUCH</p>
           <ul className="flex flex-col gap-1 text-gray-600">
-            <li>Phone Number</li>
-            <li>email@sudarshan.com</li>
+            <li>
+              Phone Number: <a href="tel:+919555525806">+91 9555525806</a>
+            </li>
+            <li>
+              Email:{" "}
+              <a href="mailto:deepanshudsp200406@gmail.com">
+                deepanshudsp200406@gmail.com
+              </a>
+            </li>
           </ul>
         </div>
       </div>
       <div>
         <hr />
         <p className="py-5 text-sm text-center">
-          &copy; 2024 Sudarshan. All Rights Reserved
+          &copy; 2024 GFoot. All Rights Reserved
         </p>
       </div>
     </>

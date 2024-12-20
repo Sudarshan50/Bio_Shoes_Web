@@ -3,10 +3,77 @@ import Title from "../components/Title";
 import CartTotal from "../components/CartTotal";
 import { ShopContext } from "../context/ShopContext";
 import { toast } from "react-toastify";
+import axiosInstance from "../lib/axiosInstance";
+import Spinner from "../components/Spinner";
 
 const PlaceOrder = () => {
   const [method, setPaymentMethod] = useState("cod");
-  const { navigate } = useContext(ShopContext);
+  const [formData, setFormData] = useState({});
+  const {
+    navigate,
+    cartItems,
+    loading,
+    setLoading,
+    getCartAmount,
+    isAuthenticated,
+  } = useContext(ShopContext);
+
+  const handlePlaceOrder = async () => {
+    const pIds = Object.keys(cartItems);
+    if (pIds.length === 0) {
+      toast.error("Cart is Empty");
+      return;
+    }
+    formData.products = pIds;
+    formData.price = getCartAmount();
+    if (!isAuthenticated) {
+      toast.warn("Please Login First Redirecting to Login Page", {
+        autoClose: 2000,
+      });
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
+      return;
+    }
+    if (
+      !formData.firstName ||
+      !formData.lastName ||
+      !formData.email ||
+      !formData.address ||
+      !formData.city ||
+      !formData.state ||
+      !formData.pincode ||
+      !formData.phone
+    ) {
+      toast.error("Please Fill All The Fields");
+      return;
+    }
+    setLoading(true);
+    await axiosInstance
+      .post("/product/checkout", {
+        formData,
+      })
+      .then((res) => {
+        if (res.data.success) {
+          toast.warn(res.data.message);
+          setLoading(false);
+        }
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message);
+        setLoading(false);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-[80vh]">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col sm:flex-row justify-between gap-4 pt-5 sm:pt-14 min-h-[80vh]:">
@@ -19,24 +86,40 @@ const PlaceOrder = () => {
           <input
             className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
             type="text"
+            value={formData.firstName}
+            onChange={(e) =>
+              setFormData({ ...formData, firstName: e.target.value })
+            }
             required
             placeholder="First Name"
           />
           <input
             className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
             type="text"
+            onChange={(e) => {
+              setFormData({ ...formData, lastName: e.target.value });
+            }}
+            value={formData.lastName}
             placeholder="Last Name"
           />
         </div>
         <input
           className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
           type="email"
+          onChange={(e) => {
+            setFormData({ ...formData, email: e.target.value });
+          }}
+          value={formData.email}
           required
           placeholder="Email Address"
         />
         <input
           className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
           type="text"
+          onChange={(e) => {
+            setFormData({ ...formData, address: e.target.value });
+          }}
+          value={formData.address}
           required
           placeholder="Address"
         />
@@ -44,12 +127,20 @@ const PlaceOrder = () => {
           <input
             className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
             type="text"
+            onChange={(e) => {
+              setFormData({ ...formData, city: e.target.value });
+            }}
+            value={formData.city}
             required
             placeholder="City"
           />
           <input
             className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
             type="text"
+            onChange={(e) => {
+              setFormData({ ...formData, state: e.target.value });
+            }}
+            value={formData.state}
             required
             placeholder="State"
           />
@@ -58,6 +149,10 @@ const PlaceOrder = () => {
           <input
             className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
             type="text"
+            onChange={(e) => {
+              setFormData({ ...formData, pincode: e.target.value });
+            }}
+            value={formData.pincode}
             required
             placeholder="Pincode"
           />
@@ -72,6 +167,10 @@ const PlaceOrder = () => {
         <input
           className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
           type="tel"
+          onChange={(e) => {
+            setFormData({ ...formData, phone: e.target.value });
+          }}
+          value={formData.phone}
           required
           placeholder="Phone Number"
         />
@@ -106,7 +205,7 @@ const PlaceOrder = () => {
           </div>
           <div className="w-full text-end mt-8">
             <button
-              onClick={() => navigate("/orders")}
+              onClick={handlePlaceOrder}
               className="bg-black text-white px-16 py-3 text-sm"
             >
               PLACE ORDER

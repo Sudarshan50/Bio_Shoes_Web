@@ -14,11 +14,35 @@ import Footer from "./components/Footer";
 import SearchBar from "./components/SearchBar";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useContext, useEffect } from "react";
+import axiosInstance from "./lib/axiosInstance";
+import { ShopContext } from "./context/ShopContext";
 
 const App = () => {
+  const { setIsAuthenticated, getCartCount, fetchUserCart, cartItems } =
+    useContext(ShopContext);
+  const checkAuth = async () => {
+    axiosInstance
+      .get("/auth/check")
+      .then((res) => {
+        if (res.status === 200) {
+          setIsAuthenticated(true);
+        }
+      })
+      .catch((err) => {
+        setIsAuthenticated(false);
+      });
+  };
+  useEffect(() => {
+    Promise.all([checkAuth(), fetchUserCart()]);
+  }, []);
+  useEffect(() => {
+    getCartCount();
+  }, [cartItems]);
+
   return (
     <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
-      <ToastContainer />
+      <ToastContainer position="bottom-right" />
       <Navbar />
       <SearchBar />
       <Routes>

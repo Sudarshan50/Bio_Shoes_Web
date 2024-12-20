@@ -17,21 +17,33 @@ const Contact = () => {
         <div className="flex flex-col justify-center items-start gap-6">
           <p className="text-gray-500 font-semibold text-xl">Our Store</p>
           <p className="text-gray-600">
-            Vindhychal Hostel,
+            IIT Delhi,
             <br />
-            IIT Delhi, Hauz Khas, New Delhi, India
+            Hauz Khas, New Delhi, India
           </p>
+
           <p className="text-gray-600">
-            Tel: (+91) 123-456-7890
+            Tel: <a href="tel:+919555525806"> +919555525806</a>
             <br />
-            Email: sudarshan@dev.com
+            Email:{" "}
+            <a href="mailto:deepanshudsp200406@gmail.com">
+              deepanshudsp200406@gmail.com
+            </a>
           </p>
           <p className="font-semibold text-xl text-gray-600">Know More</p>
           <p className="text-gray-600">
             Connect on Linked In to know more about us and our team.
           </p>
-          <button className="border border-black px-8 py-4 text-sm hover:bg-black hover:text-white transition-all duration-500">
-            Connect{" "}
+          <button
+            className="border border-black px-8 py-4 text-sm hover:bg-black hover:text-white transition-all duration-500"
+            onClick={() =>
+              window.open(
+                "https://www.linkedin.com/in/deepanshu-pandey-6baab9266/",
+                "_blank"
+              )
+            }
+          >
+            Connect
           </button>
         </div>
       </div>

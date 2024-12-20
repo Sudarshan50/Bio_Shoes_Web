@@ -3,11 +3,25 @@ import { ShopContext } from "../context/ShopContext";
 import Title from "../components/Title";
 import { assets } from "../assets/frontend_assets/assets";
 import CartTotal from "../components/CartTotal";
+import Spinner from "../components/Spinner";
 
 const Cart = () => {
-  const { products, currency, cartItems, updateQuantity, navigate } =
-    useContext(ShopContext);
+  const {
+    products,
+    currency,
+    cartItems,
+    updateQuantity,
+    navigate,
+    loading,
+    isAuthenticated,
+    getCartCount,
+    fetchUserCart,
+  } = useContext(ShopContext);
   const [cartData, setCartData] = useState([]);
+  useEffect(() => {
+    fetchUserCart();
+    getCartCount();
+  }, []);
 
   useEffect(() => {
     const tempData = [];
@@ -25,7 +39,15 @@ const Cart = () => {
       }
     }
     setCartData(tempData);
-  }, [cartItems]);
+  }, [cartItems, isAuthenticated]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <div className="border-t pt-14">
@@ -45,7 +67,7 @@ const Cart = () => {
               <div className="flex items-start gap-6">
                 <img
                   src={productData.image[0]}
-                  className="w-16 sm:w-20"
+                  className="w-16 h-20 object-cover sm:w-20 rounded-lg"
                   alt=""
                 />
                 <div>
@@ -57,7 +79,7 @@ const Cart = () => {
                       {currency} {productData.price}
                     </p>
                     <p className="px-2 sm:px-3 sm:py-1 border bg-slate-50">
-                      {item.size}
+                      Size: {item.size}
                     </p>
                   </div>
                 </div>

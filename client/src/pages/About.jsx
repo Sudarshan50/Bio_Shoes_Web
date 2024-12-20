@@ -8,7 +8,10 @@ const About = () => {
         <Title text1="ABOUT" text2="US" />
       </div>
       <div className="my-10 flex flex-col md:flex-row gap-16">
-        <img className="w-full md:max-w-[450px] rounded-md" src={assets.about_img} />
+        <img
+          className="w-full md:max-w-[450px] rounded-md"
+          src={assets.about_img}
+        />
         <div className="flex flex-col justify-center gap-6 md:w-2/4 text-gray-600">
           <p>
             Bio Shoes is dedicated to providing eco-friendly and sustainable
@@ -26,12 +29,13 @@ const About = () => {
           </p>
           <b className="text-gray-800">Our Mission</b>
           <p>
-            Our mission is to create stylish and sustainable footwear that
-            promotes environmental responsibility. We believe that fashion
-            should not come at the expense of the planet, which is why we are
-            committed to reducing our carbon footprint and promoting sustainable
-            practices. With Bio Shoes, you can look good and feel good about
-            your footwear.
+            At <strong>GFoot</strong>, we’re passionate about creating biodegradable shoes that
+            reduce carbon footprints without sacrificing quality, comfort, or
+            style. Our innovative approach transforms environmental waste into
+            eco-friendly footwear, ensuring every Gfoot product is inspired by
+            nature, works in harmony with the planet, and leaves a positive
+            impact far beyond its lifecycle. Join us in stepping toward a more
+            sustainable future—one shoe at a time.
           </p>
         </div>
       </div>

@@ -1,13 +1,13 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 import { assets } from "../assets/frontend_assets/assets";
 import RelatedProducts from "../components/RelatedProducts";
+import Spinner from "../components/Spinner";
 
 const Product = () => {
   const { pid } = useParams();
-  console.log(pid);
-  const { products, currency, addToCart } = useContext(ShopContext);
+  const { products, currency, addToCart, loading } = useContext(ShopContext);
   const [productData, setProductData] = useState(false);
   const [image, setImage] = useState("");
   const [selSize, setSize] = useState("");
@@ -15,7 +15,6 @@ const Product = () => {
   const fetchProduct = async () => {
     products.map((item) => {
       if (item._id === pid) {
-        console.log(item);
         setProductData(item);
         setImage(item.image[0]);
         return null;
@@ -30,6 +29,14 @@ const Product = () => {
   if (!productData) {
     return <div className="opacity-0"></div>;
   }
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Spinner />
+      </div>
+    );
+  }
+
   return (
     <div className="border-t-2 pt-10 transition-opacity ease-in duration-500 opacity-100">
       {/* Porduct Data  */}
