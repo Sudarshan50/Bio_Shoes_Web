@@ -28,10 +28,6 @@ app.use("/api/v1/anal", AnalyticsRouter);
 app.use("/api/v1/cart", CartRouter);
 app.use("/api/v1/product", ProductRouter);
 
-app.get("/", isChalu, (req, res) => {
-  return successResponse(res, "Welcome to the API", null);
-});
-
 dbConnect().then(() => {
   app.listen(port, () => {
     console.log(`Server running on port ${port}`);
