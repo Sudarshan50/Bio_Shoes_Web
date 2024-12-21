@@ -1,11 +1,23 @@
 import { useContext } from "react";
 import { ShopContext } from "../context/ShopContext";
 import { Link } from "react-router-dom";
+import axiosInstance from "../lib/axiosInstance";
 
 const ProductItems = ({ id, image, name, price }) => {
   const { currency } = useContext(ShopContext);
+  const handleAnalytics = async () => {
+    await axiosInstance
+      .post("anal/customIntrest", {
+        pId: id,
+      })
+      .catch((err) => console.log(err));
+  };
   return (
-    <Link to={`/product/${id}`} className="text-gray-700 cursor-pointer">
+    <Link
+      to={`/product/${id}`}
+      onClick={handleAnalytics}
+      className="text-gray-700 cursor-pointer"
+    >
       <div className="overflow-hidden">
         <img
           src={image[0]}

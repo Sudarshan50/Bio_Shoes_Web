@@ -6,10 +6,7 @@ let Anal = {};
 
 Anal.finalCheckout = async (req, res) => {
   try {
-    const userId = req.user;
-    if (!userId) {
-      return errorResponse(res, "User not found", null, 404);
-    }
+    const userId = req.user || "anonymous";
     const increment = await Interested.findOneAndUpdate(
       {},
       {
@@ -30,10 +27,7 @@ export default Anal;
 
 Anal.customIntrest = async (req, res) => {
   try {
-    const userId = req.user;
-    if (!userId) {
-      return errorResponse(res, "Not Authenticated", null, 404);
-    }
+    const userId = req.user || null;
     const { pId } = req.body;
     if (!pId) {
       return errorResponse(res, "Product Id not found", null, 404);

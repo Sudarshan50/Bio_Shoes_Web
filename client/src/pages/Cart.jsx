@@ -4,6 +4,9 @@ import Title from "../components/Title";
 import { assets } from "../assets/frontend_assets/assets";
 import CartTotal from "../components/CartTotal";
 import Spinner from "../components/Spinner";
+import axios from "axios";
+import axiosInstance from "../lib/axiosInstance";
+import { toast } from "react-toastify";
 
 const Cart = () => {
   const {
@@ -16,6 +19,7 @@ const Cart = () => {
     isAuthenticated,
     getCartCount,
     fetchUserCart,
+    setLoading,
   } = useContext(ShopContext);
   const [cartData, setCartData] = useState([]);
   useEffect(() => {
@@ -40,6 +44,22 @@ const Cart = () => {
     }
     setCartData(tempData);
   }, [cartItems, isAuthenticated]);
+
+  const handleCheckout = async () => {
+    setLoading(true);
+    await axiosInstance
+      .patch("anal/l2intrest")
+      .then((res) => {
+        if (res.status === 200) {
+          navigate("/place-order");
+          setLoading(false);
+        }
+      })
+      .catch((err) => {
+        toast.error("Something went wrong");
+      })
+      .finally(() => setLoading(false));
+  };
 
   if (loading) {
     return (
@@ -115,7 +135,7 @@ const Cart = () => {
           <div className="w-full text-end">
             <button
               hidden={cartData.length === 0}
-              onClick={() => navigate("/place-order")}
+              onClick={handleCheckout}
               className="bg-black text-white text-sm my-8 px-8 py-3"
             >
               PROCEED TO CHECKOUT
