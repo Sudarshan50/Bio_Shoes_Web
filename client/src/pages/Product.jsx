@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 import { assets } from "../assets/frontend_assets/assets";
 import RelatedProducts from "../components/RelatedProducts";
@@ -7,6 +7,7 @@ import Spinner from "../components/Spinner";
 
 const Product = () => {
   const { pid } = useParams();
+  const location = useLocation();
   const { products, currency, addToCart, loading } = useContext(ShopContext);
   const [productData, setProductData] = useState(false);
   const [image, setImage] = useState("");
@@ -25,6 +26,13 @@ const Product = () => {
   useEffect(() => {
     fetchProduct();
   }, [pid, products]);
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, [location]);
 
   if (!productData) {
     return <div className="opacity-0"></div>;
