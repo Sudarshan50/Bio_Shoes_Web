@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { assets } from "../assets/frontend_assets/assets";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 import axiosInstance from "../lib/axiosInstance";
 import Cookie from "js-cookie";
@@ -18,6 +18,8 @@ const Navbar = () => {
     setCartItems,
     setIsAuthenticated,
   } = useContext(ShopContext);
+
+  const location = useLocation();
 
   const handleLogout = async () => {
     setLoading(true);
@@ -82,14 +84,17 @@ const Navbar = () => {
         </NavLink>
       </ul>
       <div className="flex items-center gap-6">
-        <img
-          onClick={() => setShowSearch(!showSearch)}
-          src={assets.search_icon}
-          className="w-5 cursor-pointer"
-          alt=""
-        />
+        {location.pathname === "/collection" && (
+          <img
+            onClick={() => setShowSearch(!showSearch)}
+            src={assets.search_icon}
+            className="w-5 cursor-pointer"
+            alt=""
+          />
+        )}
+
         <div className="group relative">
-          <Link to={`${isAuthenticated ? '/' : "/login"}`}>
+          <Link to={`${isAuthenticated ? "/" : "/login"}`}>
             <img
               src={assets.profile_icon}
               className="w-5 cursor-pointer"
