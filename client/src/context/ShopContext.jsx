@@ -79,6 +79,8 @@ const ShopContextProvider = (props) => {
         .finally(() => {
           setLoading(false);
         });
+    } else {
+      toast.success("Item added to cart successfully");
     }
   };
 

@@ -4,7 +4,6 @@ import Title from "../components/Title";
 import { assets } from "../assets/frontend_assets/assets";
 import CartTotal from "../components/CartTotal";
 import Spinner from "../components/Spinner";
-import axios from "axios";
 import axiosInstance from "../lib/axiosInstance";
 import { toast } from "react-toastify";
 
